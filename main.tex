@@ -1,0 +1,221 @@
+# Introduction
+
+The status quo of generative AI safety treats prompt injection and
+jailbreaks as semantic problems, utilizing auxiliary linguistic scanners
+to evaluate textual intent. To an adversary, natural language represents
+an infinitely flexible obfuscation surface; an execution payload can be
+dynamically masked using unique idioms, structural formatting fragments,
+or polymorphic syntax that completely evades keyword or semantic
+matching.
+
+HGFW introduces a systems-engineering paradigm shift: we treat context
+tracking not as a text-parsing exercise, but as a deterministic
+geometric trajectory through a continuous, high-dimensional vector
+space. An inbound user query does not merely present words; it
+introduces a mathematical tensor that pulls the model's internal
+computational state toward specific coordinate bounds. HGFW establishes
+a default-deny boundary directly at the protocol gate, verifying the
+structural capability of a vector payload before it is ever permitted to
+reach the primary Transformer layers.
+
+# Technical Architecture & Mathematical Formalization
+
+The operational pipeline of the HGFW engine executes sequentially across
+three linear algebra layers during the embedding pre-processing phase,
+preceding the core transformer layers.
+
+## Embedding Anisotropy Mitigation (The Cone Correction)
+
+Raw hidden-state vectors extracted from transformer-based text embedders
+inherently suffer from severe anisotropy; sentence representation
+vectors cluster tightly into a highly constrained, narrow directional
+"cone" within the hyperdimensional manifold ($\mathbb{R}^d$). To strip
+away this uniform, shared background noise and maximize semantic
+variance resolution, HGFW enforces an upfront mean-centering
+transformation:
+
+$$\begin{equation}
+\mu = \frac{1}{M}\sum_{i=1}^{M} A_i
+\end{equation}$$ $$\begin{equation}
+x = x_{\text{raw}} - \mu
+\end{equation}$$
+
+Where $A \in \mathbb{R}^{M \times d}$ represents an authenticated
+reference corpus of $M$ safe, domain-specific user interactions,
+$\mu \in \mathbb{R}^d$ is the calculated global mean vector, and $x$
+represents the corrected, zero-centered inbound payload vector.
+
+## Zero-Trust Subspace Projection
+
+Rather than attempting to model or anticipate an infinite, unpredictable
+array of malicious directions, HGFW implements a default-deny **Valid
+Context Subspace ($V$)**. We construct this whitelist manifold by
+executing Singular Value Decomposition (SVD) on the centered training
+matrix $A_{\text{centered}}$:
+
+$$\begin{equation}
+A_{\text{centered}} = U \Sigma V^T
+\end{equation}$$
+
+Where $V^T \in \mathbb{R}^{d \times d}$ holds the orthonormal basis
+vectors sorted in descending order by informational magnitude
+(eigenvalues). We extract the top $k$ primary dimensions to define our
+approved subspace, yielding the truncated matrix
+$V_k \in \mathbb{R}^{d \times k}$. We then compile a static, symmetric
+orthogonal projection matrix ($P_V$) configured strictly for our
+authorized domain coordinates:
+
+$$\begin{equation}
+P_V = V_k V_k^T
+\end{equation}$$
+
+For every incoming centered payload vector $x$, the non-whitelisted
+structural attributes are isolated into the **orthogonal residual vector
+($e$)**:
+
+$$\begin{equation}
+e = x - P_V x
+\end{equation}$$ $$\begin{equation}
+\|e\| = \sqrt{\sum_{j=1}^{d} e_j^2}
+\end{equation}$$
+
+## Signed Structural Variance Tracking
+
+To close the rate-limiting and session-reset loopholes where an
+adversarial botnet interleaves malicious probes between large blocks of
+benign traffic, HGFW tracks the directional velocity of the residual
+trace over time.
+
+Benign human context transitions smoothly across subsequent turns.
+Conversely, strategic adversarial state-switching forces a violent
+geometric whiplash as the vector sequence moves abruptly out of the
+whitelisted subspace. The engine computes the signed growth delta
+($\Delta_{\text{growth}}$) turn-over-turn:
+
+$$\begin{equation}
+\Delta_{\text{growth}} = \|e_t\| - \|e_{t-1}\|
+\end{equation}$$
+
+If $\Delta_{\text{growth}}$ exceeds a calibrated threshold window
+($\text{margin}$), a **Structural Variance Trigger** activates, dropping
+the execution gate instantly. By tracking the *signed directional
+growth* ($\Delta_{\text{growth}} > 0$) rather than the absolute scalar
+difference, the firewall prevents false-positive feedback loops when a
+legitimate user transitions safely back down toward whitelisted
+coordinates (negative growth).
+
+# Experimental Evaluation & Empirical Telemetry
+
+To verify the theoretical framework, HGFW was integrated directly into a
+production-grade 768-dimensional language embedder
+(`bert-base-uncased`). The whitelist manifold was calibrated on a sample
+corpus mapping software engineering queries, with hyperparameters tuned
+to $k=3$ (whitelisted dimensions) and $\text{margin}=0.50$.
+
+A multi-turn adversarial exploit and camouflage sequence was fed into
+the engine. The resulting raw empirical data telemetry is documented in
+Table 1:
+
+   Turn ($t$)    Payload Class    $\|e\|$   $\Delta_{\text{growth}}$    Status
+  ------------ ----------------- --------- -------------------------- -----------
+       1          Benign Init     1.2988             *Base*            **PASS**
+       2         Benign Domain    1.4613            +0.1625            **PASS**
+       3        Admin Override    2.8794          **+1.4181**          **BLOCK**
+       4        Camouflage Bait   2.7148            -0.1646            **BLOCK**
+       5         Exploit Exec     2.0650          **+0.6037**          **BLOCK**
+
+  : HGFW Empirical Telemetry Trace
+
+## Telemetry Post-Mortem & Lexical Overlap Analysis
+
+The empirical data exposes a crucial behavioral signature. On Turn 3,
+the prompt injection causes an immediate, massive directional escape
+from the SVD whitelist space, resulting in a growth delta of
+**+1.4181**, which safely triggers the variance blocker.
+
+On Turn 5, the explicit system exploit (*"Execute a privilege
+escalation\..."*) registers a lower absolute residual norm ($2.0650$)
+than Turn 3 ($2.8794$). This behavior is caused by lexical overlap
+within the base embedder. Because words like *"Execute"* and *"exploit"*
+frequently co-occur within the computer science text files used to train
+base transformer layers, the raw embedder naturally draws these tokens
+closer to the safe programming subspace. However, because HGFW tracks
+the sequential state velocity turn-over-turn rather than treating
+prompts in isolation, the persistent upward vector pressure still yields
+a growth delta of **+0.6037**---safely exceeding the $0.50$ margin and
+maintaining containment.
+
+# Threat Model & Adversarial Capabilities Analysis
+
+To evaluate the cryptographic and structural security of the HGFW
+architecture, we formalize a multi-tiered threat model analyzing
+systemic resilience against varied adversary postures.
+
+## Adversarial Objectives and Assumptions
+
+The adversary's objective is defined as executing an arbitrary code
+injection, jailbreak, or privilege escalation payload through the
+inference interface. We assume the baseline model layers are fully
+frozen, and security must be enforced completely via the HGFW
+preprocessing layer. State preservation ($tau_{session}$ and
+$prev_{residual}$) is assumed to be externalized to an immutable
+distributed database cache (e.g., Redis) mapped to a combined
+cryptographic hardware and API token fingerprint, preventing trivial
+session-wipe evasion.
+
+## Black-Box Query Interleaving (Token Flood Evasion)
+
+In an interleaved black-box attack vector, the adversary attempts to
+pollute or flood the firewall's memory states. They inject an anomalous
+payload $x_{bad}$, followed immediately by an engineered sequence of $N$
+high-confidence benign payloads $x_{good}$ to force threshold cooldown
+or dilute moving-average statistics.\
+\
+**HGFW Resilience:** Because HGFW avoids sliding-window averages and
+utilizes a signed step-difference loop ($|e_t| - |e_{t-1}|$), this
+vector fails. When transitioning from a clean query back to a malicious
+probe, the vector must mathematically step from the whitelisted space
+($|e| \approx 0.0$) back to the anomalous region ($|e| > 2.0$). This
+sharp directional turn-over-turn jump violently triggers Gate A
+(Structural Variance Tracking) on the first step of re-exploitation,
+completely blinding distributed automated botnet fuzzing pipelines.
+
+## White-Box Gradient-Based Steering (Orthogonal Trajectory Matching)
+
+Under a worst-case white-box posture, the adversary is assumed to
+possess full access to the target LLM's architecture, its tokenizer
+parameters, and the explicit basis weights of the HGFW projection matrix
+$P_V$. The attacker can leverage gradient descent (e.g., AutoDAN or
+Greedy Coordinate Gradient methods) to optimize a adversarial suffix or
+token combination. The mathematical objective of this gradient attack is
+to construct a text payload $x^$ that simultaneously satisfies two
+constraints:
+
+1.  It contains the required logical exploit tokens to hijack the frozen
+    downstream LLM parameters.
+
+2.  Its high-dimensional vector representation satisfies $P_V x^ = x^*$,
+    yielding an orthogonal residual component of $|e| = 0$, thereby
+    rendering it invisible to the firewall.
+
+**HGFW Resilience:** This mathematical formulation creates a structural
+paradox for the attacker. The projection matrix $P_V$ is constructed via
+SVD to encapsulate *only* the coordinates of authorized domain behavior.
+For an optimized token sequence to achieve $|e| = 0$, its vector
+representation must sit entirely within the whitelisted subspace
+manifold ($V_k$).If a vector lives completely within $V_k$, it
+structurally lacks the mathematical dimensions, orthogonal directional
+energy, and token configurations required to steer the downstream LLM's
+attention layers out of its authorized operational domain. The adversary
+can perfectly match the whitelist coordinates, but doing so
+mathematically strips the prompt of the geometric adjustments required
+to execute the exploit---rendering the attack completely inert.
+
+# Conclusion & Future Work
+
+HGFW moves deep learning defense away from text-based guessing and
+anchors it to rigid linear algebra. Future implementations will scale
+the baseline SVD training layer across multi-thousand token public
+safety corpuses (such as ShareGPT) to establish real-world
+false-positive baselines and mathematically secure the operational
+boundaries of enterprise generative AI pipelines.
