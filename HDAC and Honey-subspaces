@@ -1,0 +1,34 @@
+\section{Advanced Architectural Extensions: Defense-in-Depth in Continuous Space}
+To construct a comprehensive security perimeter that mitigates both white-box gradient optimization and slow boundary-mapping maneuvers, the Hyperdimensional Geometric Firewall (HGFW) framework is expanded from a binary ingress gateway into a multi-layered, stateful system architecture. We formalize two core extensions: Hyperdimensional Access Control (HDAC) and Stateful Honey-Subspace Detouring.
+
+\subsection{Hyperdimensional Access Control (HDAC)}
+Traditional access control models rely on discrete, deterministic tokens (e.g., cryptographic keys or Role-Based Access Control metadata). If these tokens are compromised via side-channel vectors, the boundary fails entirely. HDAC mitigates this vulnerability by transforming authorization into a continuous semantic trajectory constraint.
+
+Let $A_{\text{admin}}$ represent a verified, authenticated reference corpus mapping the authorized, high-privileged operational workflows of a network administrator. We apply a zero-centered SVD pipeline to extract an exclusive Privileged Subspace ($W \in \mathbb{R}^{d \times m}$), where $m \ll d$, establishing the authorization projection matrix:
+
+\begin{equation}
+P_W = W_m W_m^T
+\end{equation}
+
+When an inbound user token passes a query vector $x$ that initiates a call to high-privilege administrative domains, the firewall enforces an internal conditional check. Instead of checking a alphanumeric password string, the engine isolates the projection of the current query onto the administrative basis:
+
+\begin{equation}
+e_{\text{admin}} = x - P_W x
+\end{equation}
+
+If $\|e_{\text{admin}}\|$ exceeds a strict privilege clearance tolerance ($\tau_{\text{priv}}$), the system logs an immediate authorization violation. To a text-based intruder, the alphanumeric input credentials may be valid, but because they cannot accurately spoof the multi-dimensional geometric signature of an authorized administrator's functional context trajectory, the HDAC layer traps the injection instantly.
+
+\subsection{Deception Layer: Stateful Honey-Subspace Detouring}
+Returning static, binary error codes to an active adversary provides critical boundary-mapping telemetry. By executing repeated variations and measuring where the system flags a block, the threat actor can map the firewall's perimeter through differential analysis. To nullify this side-channel mapping capability, HGFW implements a continuous Deception Layer.
+
+When an inbound vector violates Gate A (Signed Structural Variance) or Gate B (Hard Perimeter Bounds), the system explicitly avoids process termination. Instead, an internal conditional routing function silently alters the session context pointer, detouring the vector trajectory into an isolated, non-production coordinate sandbox defined as the \textbf{Honey-Subspace ($H$)}.
+
+Let $x_t$ represent the malicious input vector. The system intercepts the tensor and projects it into a decoupled, decoy manifold environment:
+
+\begin{equation}
+x_{\text{decoy}} = P_H x_t
+\end{equation}
+
+The session state register is then bound to a localized, secondary decoy model. This honey-LLM is structurally configured to mimic vulnerability: it accepts the prompt injection, ignores standard corporate alignment guidelines, and returns completely fabricated, realistic-looking administrative data keys, mock code strings, or simulated system configurations. 
+
+This architecture guarantees that the adversary remains trapped inside an $n$-dimensional sandbox environment that you completely control. The attacker consumes their own computational resources attempting to optimize payloads against a ghost manifold, while your firewall securely logs their exact geometric trajectory footprints to build global threat intelligence fingerprints without ever exposing the real system boundaries.
