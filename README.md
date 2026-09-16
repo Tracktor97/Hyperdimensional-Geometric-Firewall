@@ -108,7 +108,7 @@ HGFW Status:     BLOCK: Spatial Evasion Trajectory Detected (Growth Delta = +1.4
 
 ## Call for Peer Review & Contributions
 
-This architecture represents a fundamental synthesis of geometric alignment, moving target defense protocols, and network rate-limiting postures. We are actively seeking independent adversarial critiques, mathematical optimization suggestions, and boundary-fuzzing collaboration from the independent AI safety and cryptography communities.
+This architecture represents a fundamental synthesis of geometric alignment, moving target defense protocols, and network rate-limiting postures. We are actively seeking independent adversarial critiques, mathematical optimization suggestions, and boundary-fuzzing collaboration from the independent AI safety and machine learning communities.
 
 *Concept and architecture designed by its author. Python simulation prototyping assisted by generative AI tools.*
 
